@@ -7,7 +7,7 @@ Technology Software Stack:
 	1)VS Code
 	2)MySql Workbench
 	3)Dia Diagram
-	4)Languages: Python, HTML, CSS, Jinga, SQL
+	4)Languages: Python, HTML, CSS, Jinja, SQL
 
 Requirements:
 	1)Python
@@ -20,31 +20,27 @@ Requirements:
 
 Directory structure of the project:
 1911_DBMS_LAB_PROJECT
-├── app.py (#main file to rn the server for the project.)
-├── config.py (#configuration file containing the passwords and secret keys.)
-├── Database (#folder containing the sql scripts used when executing the commands on MySql server.)
-│   └── createTables.sql (#used MySql workbench and the terminal for the same.)
-├── dbcm.py 
-|	(#context manager file for datbase, connect to database, execute commands and close connection.)
-├── Diagrams 
-|	(#folder containing diagrams used in the project, Dia Diagram software was used to construct the 
-|		diagrams.)
-├── __pycache__
-│   ├── config.cpython-37.pyc
-│   └── dbcm.cpython-37.pyc
-├── README.md (#file containin the details of the project.)
-├── Screenshots (#file containing the screenshots of the project.)
-├── static (#folder with static file.)
-│   ├── products(#folder containing the images used in the project.)
-│   └── website.css (#css file used for the project.)
-├── templates (#folder with the template html files of the project.)
-│   ├── admin_login.html
-│   ├── base.html
-│   ├── customer_login.html
-│   ├── my_account.html
-│   ├── signup.html
-│   └── website.html
-└── WorkFlowDocumentation.txt (#time-wise work done documentation file.)
+	1)app.py (#main file to rn the server for the project.)
+	2)config.py (#configuration file containing the passwords and secret keys.)
+	3)Database (#folder containing the sql scripts used when executing the commands on MySql server.)
+		1)createTables.sql (#used MySql workbench and the terminal for the same.)
+	4)dbcm.py 
+		(#context manager file for datbase, connect to database, execute commands and close connection.)
+	5)Diagrams 
+		(#folder containing diagrams used in the project, Dia Diagram software was used to construct the diagrams.)
+	6)README.md (#file containin the details of the project.)
+	7)Screenshots (#file containing the screenshots of the project.)
+	8)static (#folder with static file.)
+		1)products(#folder containing the images used in the project.)
+		2)website.css (#css file used for the project.)
+	9)templates (#folder with the template html files of the project.)
+		1)admin_login.html
+		2)base.html
+		3)customer_login.html
+		4)my_account.html
+		5)signup.html
+		6)website.html
+	10)WorkFlowDocumentation.txt (#time-wise work done documentation file.)
 
 To run the app:
 ->open the project directory and run the app.py file with the below command
