@@ -1,0 +1,19 @@
+
+1911 DBMS LAB PROJECT work-done Documentation
+
+Started working on the login pages of customer and admin with HTML and Python.
+Done simple login and sign up templates for customer. Also worked on the signup amd login forms for the same.
+
+Referneces:
+    1) https://www.geeksforgeeks.org/login-and-registration-project-using-flask-and-mysql/amp/
+    2) https://roytuts.com/simple-shopping-cart-using-python-flask-mysql/
+   
+Worked on the ER Diagram, Database Model Diagram (tables) and the Use Case Diagram for the project.
+Used Dia Diagram Software (dia 0.97.3) for the same.
+
+Created tables based on the erd and database model in MySql.
+Inserted data into the category and the product tables.
+
+Displayed the products based on the category from the databases on the home page of the website.
+References:
+    1) https://github.com/mohsinenur/menshut

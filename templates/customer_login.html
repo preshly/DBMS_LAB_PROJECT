@@ -1,0 +1,42 @@
+
+{% extends 'base.html' %}
+
+{% block body %}
+
+	<!-- <p> Customer login page </p> -->
+	<header class="website-header">
+		<div class="div-logo">
+			<a href = " {{ url_for('.website') }} " class="logo-text"> Ecomm </a>
+		</div>
+		
+		<nav class="website-nav">
+			<a href = " {{ url_for('.signup') }} "> Sign up </a>
+			<a href = " {{ url_for('.customer_login') }} "> Log in </a>
+		</nav>
+		
+	</header>
+	
+	<div align="center">
+		<div align="center" class="signin-border">
+			<div class="signup-header">
+				<h1 class="word"> Log In </h1> 
+			</div> </br> 
+			
+			<h2 class="signup-word"> 
+				<form action=" {{ url_for('customer_login')}} " method="post">
+		
+					<input id="username" name="username" type="text" placeholder="username" class="signup-textbox" /> </br> </br>
+					<input id="password" name="password" type="text" placeholder="password" class="signup-textbox" /> </br> </br>
+					<input type="submit" class="signup-btn" value="Log In" /> </br> </br>
+				
+				</form>
+			</h2>
+			<p class="already-signed-in">Don't have an account? &nbsp; 
+				<a class="already-signed-in" href=" {{ url_for('signup') }} "> Sign Up <a> 
+			</p>
+		</div>
+	<div>
+	
+	<div> <br/> <br/> <br/> </div>
+
+{% endblock %}

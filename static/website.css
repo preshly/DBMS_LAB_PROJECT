@@ -1,0 +1,208 @@
+
+body{
+	background-color: white;
+	font-family: "Halvetica Nueue";
+	margin: 0px;
+}
+
+.website-header{
+	position: relative;
+	left: 0px;
+	right: 0px;
+	height: 100px;
+	width: 100%;
+	background-color: #0a2d42;
+	z-index: 100;
+	
+}
+
+
+.logo-text{
+	display: block;
+	font-family: "Halvetica Nueue";
+	font-weight: bold;
+	color: white;
+	
+	height: 80px;
+	width: 40px;
+	
+	position: fixed;
+	top: 15px;
+	left: 15px;
+
+}
+
+.website-nav{
+	float: right;
+	height: 100%;
+}
+
+.website-nav a{
+	color: white;
+	font-size: 15px;
+	font-weight: bold;
+	font-family: "Halvetica Nueue";
+	padding: 20px 20px 0px 0px;
+	display: inline-block;
+}
+
+
+a:hover{
+	text-decoration: underline;
+	color: red;
+}
+
+/* css for signup.html */
+/* ------------ */
+.signup-header{
+	padding: 3px 100px;
+	width: 150px;
+	height: 70px;
+	background-color: #236b8e;
+	border-radius: 10px;
+}
+
+.signup-border{
+	position: relative;
+	top: 40px;
+	padding: 80px 50px;
+	width: 400px;
+	height: 700px;
+	border: 1px solid #236b8e;
+	border-radius: 0px;
+	background-color: #9ac0cd;
+}
+
+.signup-btn{
+	padding: 10px 40px;
+	background-color: #236b8e;
+	color: white;
+	font-style: oblique;
+	font-weight: bold;
+	border-radius: 10px;
+}
+
+.signup-textbox{
+	padding: 10px 40px;
+	background-color: #236b8e;
+	border-radius: 10px;
+	height: 30px;
+}
+
+.signup-word{
+	
+	color: white;
+	font-style: oblique;
+	font-weight: bold;
+}
+
+.already-signed-in{
+	color: #236b8e;
+	font-style: oblique;
+	font-weight: bold;
+}
+
+::placeholder {
+	color: white;
+	opacity: 1;
+	font-style: oblique;
+	font-weight: bold;
+}
+
+/* ------------ */
+
+/* css for custome_login.html */
+/* ------------ */
+.signin-border{
+	position: relative;
+	top: 40px;
+	padding: 80px 50px;
+	width: 400px;
+	height: 350px;
+	border: 1px solid #236b8e;
+	border-radius: 0px;
+	background-color: #9ac0cd;
+}
+/* ------------ */
+
+/* css for admin_login.html */
+/* ------------ */
+.admin-signup-header{
+	padding: 3px 100px;
+	width: 200px;
+	height: 100px;
+	background-color: #236b8e;
+	border-radius: 10px;
+}
+
+/* ------------ */
+
+/* css for website.html */
+/***display products***/
+/* ------------ */
+#product-grid {
+	margin: 40px;
+}
+
+#product-grid .txt-heading {
+	margin-bottom: 18px;
+	text-align: center;
+	font-weight: bold;
+	font-size: x-large;
+}
+
+
+.product-item {
+	float: left;
+	background: #ffffff;
+	margin: 30px 30px 0px 0px;
+	border: #E0E0E0 1px solid;
+	position: relative;
+	left: 20px;
+}
+
+
+.product-image {
+	height: 300px;
+	width: 280px;
+	background-color: #FFF;
+}
+
+.product-image img{
+	height: 320px;
+	width: 200px;
+	position: relative;
+	left: 40px;
+}
+
+.product-tile-footer {
+    padding: 15px 15px 0px 15px;
+    overflow: auto;
+}
+
+.product-title {
+	margin-bottom: 20px;
+	padding-top: 10px;
+	text-align: center;
+}
+
+.product-price {
+	float:left;
+}
+
+.cart-action {
+	float: right;
+}
+
+
+.btnAddAction {
+    padding: 5px 10px;
+    margin-left: 5px;
+    background-color: #efefef;
+    border: #E0E0E0 1px solid;
+    color: #211a1a;
+    float: right;
+    text-decoration: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
