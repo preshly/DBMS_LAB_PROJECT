@@ -17,3 +17,105 @@ Inserted data into the category and the product tables.
 Displayed the products based on the category from the databases on the home page of the website.
 References:
     1) https://github.com/mohsinenur/menshut
+   
+Dirctory Structure:
+1911_DBS_LAB_PROJECT
+├── app.py (#main file to rn the server for the project.)
+├── config.py (#configuration file containing the passwords and secret keys.)
+├── Database (#folder containing the sql scripts used when executing the commands on MySql server.)
+│   └── createTables.sql (#used MySql workbench and the terminal for the same.)
+├── dbcm.py (#context manager file for datbase, connect to database, execute commands and close connection.)
+├── Diagrams (#folder containing diagrams used in the project, Dia Diagram software was used to construct the diagrams.)
+│   ├── AdminUseCase.dia
+│   ├── AdminUseCase.png
+│   ├── CustomerUseCase.dia
+│   ├── CustomerUseCase.png
+│   ├── DBModel.dia
+│   ├── DBModel.png
+│   ├── erd.dia
+│   └── erd.png
+├── README.md (#file containin the details of the project.)
+├── Screenshots (#file containing the screenshots of the project.)
+│   ├── adminTable.png
+│   ├── allTables.png
+│   ├── cartTable.png
+│   ├── categoryTable.png
+│   ├── customerTable1.png
+│   ├── customerTable2.png
+│   ├── orderTable1.png
+│   ├── orderTable2.png
+│   ├── productTable1.png
+│   └── productTable2.png
+├── static (#folder with static files.)
+│   ├── products (#folder containing the images used in the project.)
+│   │   ├── afterShokzAeropex.jpg
+│   │   ├── aftershokzTrekzTitanium.jpg
+│   │   ├── AmazonBasicsTool BagBackpack,.jpg
+│   │   ├── apple11.jpg
+│   │   ├── apple7.jpg
+│   │   ├── ArtisBT90WirelessPortableBluetoothSpeaker.jpg
+│   │   ├── boAtRockerz450.jpg
+│   │   ├── boAtStone1705WBluetoothSpeaker.jpg
+│   │   ├── CelloOasisCentreTable .jpg
+│   │   ├── CicadaPremiumHydraStainlessSteelDinningTable.jpg
+│   │   ├── ComfyBeanBagsFoldableLounger.jpg
+│   │   ├── CrafteniaWoodenFoldingSideTable .jpg
+│   │   ├── DagcrosMensBoysClassicHoodedTShirt.jpg
+│   │   ├── EdikoMensMeshSnapbackCap.jpg
+│   │   ├── ElkBoysTShirt.jpg
+│   │   ├── EYEBOGLERVNeckShawlCollarMensTShirt.jpg
+│   │   ├── FabSeasonsSolidPolyesterGolfFlatCap.jpg
+│   │   ├── FaburaaRioPremiumVelvetChair.jpg
+│   │   ├── HandcuffsAdjustableCap.jpg
+│   │   ├── HandcuffsUnisexCap.jpg
+│   │   ├── iBallMusiCubeX1WirelessUltraPortableBluetoothSpeakers.jpg
+│   │   ├── iluNYCap.jpg
+│   │   ├── InfinityJBLFuzePintDeepBassDualEQBluetooth.jpg
+│   │   ├── innovativeEdgeMensClassicFitTShirt.jpg
+│   │   ├── jblC100SI.jpg
+│   │   ├── LakdwoodWoodenandFabricBackrestAccentSofaChair.jpg
+│   │   ├── LordzVolleyballNiceSize4.jpg
+│   │   ├── LukeLillyBoysCutSewHalfSleeveCottonTshirts.jpg
+│   │   ├── lumifordUltimateU20.jpg
+│   │   ├── MBTCLapisFoldingTable.jpg
+│   │   ├── MOCABagSleeveAppleMacBook.jpg
+│   │   ├── MONCIMilestoneLaptopBackpacks.jpg
+│   │   ├── MSTimbersAndTheParekhDecoChair.jpg
+│   │   ├── NikeHandbag.jpg
+│   │   ├── NikeObsidianBlackWolfGreyBackpack.jpg
+│   │   ├── NiviaCratersMoldedVolleyball .jpg
+│   │   ├── NiviaShiningStarFootball .jpg
+│   │   ├── noiseShotsRush.jpg
+│   │   ├── nokiaAndroid.jpg
+│   │   ├── OGIOWomensHamptonsWindowpaneHandbag.jpg
+│   │   ├── oppoA12.jpg
+│   │   ├── oppoA5s.jpg
+│   │   ├── redmi8.jpg
+│   │   ├── redmiNote8Pro.jpg
+│   │   ├── samGalaxyM01.jpg
+│   │   ├── samGalaxyM31.jpg
+│   │   ├── SMTHandStichedFootballSize05.jpg
+│   │   ├── SolimoWandererMultiPurposeTable .jpg
+│   │   ├── SonySRS_XB23WirelessExtraBassBluetoothSpeaker.jpg
+│   │   ├── TommyHilfigerNavyLaptopBackpack.jpg
+│   │   ├── TyranTCap.jpg
+│   │   ├── VectorXSpikeRubberMouldedVolleyball .jpg
+│   │   ├── vivoV20.jpg
+│   │   ├── vivoY12.jpg
+│   │   ├── voodaniaTelstarCombowithPump .jpg
+│   │   ├── WildcraftBlackAndMelBackpack .jpg
+│   │   ├── WildcraftTurnaroundPolyesterBlueBag.jpg
+│   │   ├── ZachariasMenWoolenCapwithNeckwarmer.jpg
+│   │   ├── ZebronicsZebCountyBluetoothSpeaker.jpg
+│   │   ├── ZeroGravityRecliningLoungePortableChair.jpg
+│   │   └── zinqTechnologiesBeatle5155.jpg
+│   └── website.css (#css file used for the project.)
+├── templates (#folder with the template html files of the project.)
+│   ├── admin_login.html
+│   ├── base.html
+│   ├── customer_login.html
+│   ├── my_account.html
+│   ├── signup.html
+│   └── website.html
+└── WorkFlowDocumentation.txt (#time-wise work done documentation file.)
+
