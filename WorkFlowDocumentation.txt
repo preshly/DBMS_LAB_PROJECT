@@ -13,6 +13,7 @@ Used Dia Diagram Software (dia 0.97.3) for the same.
 
 Created tables based on the erd and database model in MySql.
 Inserted data into the category and the product tables.
+Used a separate folder for all the product images (/static/products) and stored only the image name in the databases.
 
 Displayed the products based on the category from the databases on the home page of the website.
 References:
