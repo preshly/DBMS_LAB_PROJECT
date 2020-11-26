@@ -1,0 +1,7 @@
+
+Video links for the project:
+	1)Mid Review:
+		https://drive.google.com/file/d/1UtXWw4kR4hiWbXvsB-IkT71LNzyQQY3D/view?usp=sharing
+		Kindly Note: In the video for erd, the relationship between product and category is explained as one to one.
+		It should be many to one, as many products can belong to a category, as I realised it later. I have made the changes in the erd.
+
