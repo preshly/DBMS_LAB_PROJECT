@@ -38,7 +38,15 @@ create table customer(
     primary key(idCustomer, email, username)
 );
 
+alter table customer modify column password varchar(50) not null;
+
 desc customer;
+
+select * from customer;
+
+delete from  customer where idCustomer=15;
+
+select idCustomer from customer where email='rohit@gmail.com' and username='rohitur';
 
 
 #category table
@@ -99,6 +107,9 @@ create table orders(
     foreign key(idCustomer) references customer(idCustomer),
     foreign key(idProduct) references product(idProduct)
 );
+
+alter table orders add status varchar(30) not null;
+alter table orders drop column status;
 
 desc orders;
 
@@ -169,4 +180,6 @@ insert into product(name, cost, description, image, quantityAvailable, categoryN
 
 
 select * from product;
+
+use labDB;
 

@@ -15,20 +15,39 @@
 		</nav>
 		
 	</header>
+
+
+	{% if messages %}
+		{% for message in messages %}
+			{% if message == 'Please fill all the details' %}
+				<script> alert('Please fill all the details ') </script>
+			{% elif message == 'Invalid username or password' %}
+				<script> alert('Invalid username or password')
+					alert('If you dont have an account, then please Sign up')	
+				</script>
+			{% endif %}
+		{% endfor %}
+	{% endif %}
 	
-	<div align="center">
+	<div align="center" class="signup-form-box">
 		<div align="center" class="signin-border">
 			<div class="signup-header">
-				<h1 class="word"> Log In </h1> 
+				<h1 class="word"> Log In </h1>
+				<p> *All fields are mandatory</p>
 			</div> </br> 
 			
 			<h2 class="signup-word"> 
 				<form action=" {{ url_for('customer_login')}} " method="post">
 		
-					<input id="username" name="username" type="text" placeholder="username" class="signup-textbox" /> </br> </br>
-					<input id="password" name="password" type="text" placeholder="password" class="signup-textbox" /> </br> </br>
-					<input type="submit" class="signup-btn" value="Log In" /> </br> </br>
-				
+					<input id="username" name="username" type="text" placeholder="username" class="signup-textbox" /> <br> <br>
+					<input id="password" name="password" type="password" placeholder="password" class="signup-textbox" /> 
+					
+					<br>
+					<span>
+						<input type="checkbox" onclick="hidePasswordVisibility()" /> <p class="hide-word">Show Password </p>
+					</span>					 
+					<br> <br>
+					<input type="submit" class="signup-btn" value="Log In" /> <br> 
 				</form>
 			</h2>
 			<p class="already-signed-in">Don't have an account? &nbsp; 

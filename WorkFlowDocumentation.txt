@@ -120,3 +120,8 @@ Dirctory Structure:
 │   └── website.html
 └── WorkFlowDocumentation.txt (#time-wise work done documentation file.)
 
+Modified the erd and database model as per the requirement.
+Worked on the login and the signup forms for the customer. Integrated the froms with the database.
+Its working with a great effort.
+The user cannot use an email or username which is already been used, it will give error. 
+This I took beacuse of keeping username and email as primary keys in the customer table.

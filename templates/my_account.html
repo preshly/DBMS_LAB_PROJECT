@@ -3,6 +3,56 @@
 
 {% block body %}
 
-	<p> my account page </p>
+	<!-- <p> my account page </p> -->
+	<header class="website-header">
+		<div class="div-logo">
+			<a href = " {{ url_for('.customer_loggedin_home_page') }} " class="logo-text"> Ecomm </a>
+		</div>
+		
+		<nav class="website-nav">
+			<a href = " {{ url_for('.customer_logout') }} "> Log out </a>
+		</nav>
+	</header>
+
+
+	<div align="center" class="signup-form-box">
+		<div align="center" class="signup-border">
+			<div class="signup-header">
+				<h3 class="word"> My Account </h3>
+				<!-- <p> *All fields are mandatory</p> -->
+			</div> <br/> 
+			
+			
+			{% if userDetails %}
+				<h2 class="signup-word"> 
+					<form action=" {{ url_for('signup')}} " method="post">
+						
+						
+						<input id="firstname" name="firstname" type="text"  class="signup-textbox" value = "Name: {{ userDetails[0] }} " readonly /> </br> </br>
+						<input id="lastname" name="lastname" type="text" class="signup-textbox" value="Lastname: {{ userDetails[1] }} " readonly /> </br> </br>
+						<input id="email" name="email" type="email"  class="signup-textbox" value="Email: {{ userDetails[2] }} " readonly /> </br> </br>
+						<input id="contact" name="contact" type="tel"  class="signup-textbox" value="Contact: {{ userDetails[3] }} " readonly /> </br> </br>
+						
+						<input id="houseno" name="houseno" type="text"  class="signup-textbox" value="House/Flatno: {{ userDetails[4] }} " readonly /> </br> </br>
+						<input id="street" name="street" type="text" class="signup-textbox" value="Street/Village: {{ userDetails[5] }}" readonly /> </br> </br>
+						<input id="city" name="city" type="text" class="signup-textbox" value="City: {{ userDetails[6] }}" readonly /> </br> </br>
+						<input id="state" name="state" type="text"  class="signup-textbox" value="State: {{ userDetails[7] }}" readonly /> </br> </br>
+						<input id="country" name="country" type="text"  class="signup-textbox" value="Country: {{ userDetails[8] }}" readonly /> </br> </br>
+
+						<input id="username" name="username" type="text" class="signup-textbox" value="Username: {{ userDetails[9] }}" readonly /> </br> </br>
+						<input id="password" name="password" type="password" placeholder="password" class="signup-textbox" value=" {{ userDetails[10] }}" readonly />
+						
+						<br>
+						<span>
+							<input type="checkbox" onclick="hidePasswordVisibility()" /> <p class="hide-word">Show Password </p>
+						</span>
+						<br> <br>
+
+			{% endif %}
+			
+		</div>
+	<div>
+
+	<div> <br/> <br/> <br/>  </div>
 
 {% endblock %}

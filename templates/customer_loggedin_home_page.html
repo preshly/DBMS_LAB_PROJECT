@@ -1,28 +1,39 @@
+
 {% extends 'base.html' %}
 
 {% block body %}
 	<!-- Home page for the website -->
 	<header class="website-header">
 		<div class="div-logo">
-			<a href = " {{ url_for('.website') }} " class="logo-text"> Ecomm </a>
+			<a href = " {{ url_for('.customer_loggedin_home_page') }} " class="logo-text"> Ecomm </a>
 		</div>
 		
 		<nav class="website-nav">
-			<a href = " {{ url_for('.signup') }} "> Sign up </a>
-			<a href = " {{ url_for('.customer_login') }} "> Log in </a>
+			<a href = " {{ url_for('.my_account') }} "> My Account </a>
+			<a href = " {{ url_for('.customer_logout') }} "> Log out </a>
 		</nav>
 	</header>
 	
 	{% with messages = get_flashed_messages() %}  
 		{% if messages %}  
 			{% for message in messages %}  
-				{% if message == 'You are logged out' %}
-					<script> alert('You are logged out') </script>
+				{% if message == 'Login successful' %}
+				<script> alert('Login successful') </script>
+				
+				{% elif message == 'Signup successful' %}
+					<script> alert('Signup successful') </script>
 				{% endif %}
 			{% endfor %}  
 		{% endif %}  
     {% endwith %}
-
+	
+	{% if messages %}
+		{% for message in messages %}
+			{% if message == 'Signup successful' %}
+				<script> alert('Signup successful') </script>
+			{% endif %}
+		{% endfor %}
+	{% endif %}
 
 	<div id="product-grid">
 		<div class="txt-heading"> Products </div>
