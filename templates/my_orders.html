@@ -1,0 +1,61 @@
+
+
+{% extends 'base.html' %}
+
+{% block body %}
+	<!-- Home page for the website -->
+	<header class="website-header">
+		<div class="div-logo">
+			<a href = " {{ url_for('.customer_loggedin_home_page') }} " class="logo-text"> Ecomm </a>
+		</div>
+		
+		<nav class="website-nav">
+            <a href = " {{ url_for('.my_orders') }} "> My Orders </a>
+            <a href = " {{ url_for('.my_cart') }} "> My Cart </a>
+			<a href = " {{ url_for('.my_account') }} "> My Account </a>
+			<a href = " {{ url_for('.customer_logout') }} "> Log out </a>
+		</nav>
+    </header>
+
+    <div id="product-grid">
+        <div class="txt-heading"> My Orders</div>
+        <div> </div>
+        <br> <br> <br>
+        {% if messages %}
+            {% for message in messages %}  
+				{% if message == 'You don\'t have any orders'  %}
+					<p style="text-align: center;"> You don't have any orders </p>
+				{% endif %}
+			{% endfor %}
+        {% endif %}
+        
+        {% for product in products %}
+            {% for item in products[product] %}
+                <div class="product-item">
+                    <form method="" action="">
+                        <div class="product-image"> <img src="static/products/{{ item[0] }} " ></div>
+                        <div class="product-tile-footer">
+                            <a href="{{ url_for('.customer_view_product', code=item[3] ) }} "  style="color: black;" >
+								<div class="product-title" > {{ item[1] }} </div> 
+							</a>
+                            <div class="product-price">&#8377; {{ item[2] }} </div>
+                            <div class="cart-action">
+                                
+                                <input type="hidden" id="code" name="code" value="{{ item[3] }}"/>
+                                <input type="text" class="product-quantity" name="quantity" value="1" size="2" readonly/>
+                                <input type="hidden" id="imageName" name="imageName" value="{{ item[0] }}" />
+                                <input type="hidden" id="productPrice" name="productPrice" value="{{ item[2] }}" />
+                                                              
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            {% endfor %}
+        {% endfor %}
+                    
+    </div>
+
+    <div style="clear: both;"> </div> <div> </div>
+    <br> <br>
+
+{% endblock %}

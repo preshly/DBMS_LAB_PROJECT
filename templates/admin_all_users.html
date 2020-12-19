@@ -1,0 +1,62 @@
+
+{% extends 'base.html' %}
+
+{% block body %}
+	<!-- all users page for the admin -->
+	<header class="website-header">
+		<div class="div-logo">
+			<a href = " {{ url_for('.dashboard') }} " class="logo-text"> Dashboard </a>
+		</div>
+		
+		<nav class="website-nav">
+            <a href = " {{ url_for('.admin_category') }} "> Product Category </a>
+			<a href = " {{ url_for('.all_products') }} "> Products </a>
+			<a href = " {{ url_for('.all_users') }} ">  Customers </a>
+			<a href = " {{ url_for('.frequent_products') }} ">Frequently Viewed Products </a>
+			<a href = " {{ url_for('.admin_customer_orders') }} "> All Orders  </a>
+			<a href = " {{ url_for('.admin_logout') }} "> Log out </a>
+		</nav>
+	</header>
+    
+    <br> <br> <br> <br>
+
+    <div class="txt-heading" > <p class="txt-heading"> Users  </p>  </div>
+    <br>
+
+    <table class="tbl-cart table-css"  cellpadding="7px" cellspacing="1" >
+        <tbody> <!-- style="text-align:center;" -->
+            <tr> <!-- width="10%" -->
+                <th>Customer ID</th>
+                <th>Email</th>
+                <th >First Name</th>
+                <th >Last Name</th>
+                <th >Contact </th>
+                <th >HouseNo/FlatNo </th>
+                <th > Street/Village</th>
+                <th >City/Town </th>
+                <th >State </th>
+                <th >Country </th>
+                <th >Username </th>
+            </tr>
+            {% for user in users %}
+                 
+                <tr>         
+                        <td >  {{ user[0] }}  </td>
+                        <td >  {{ user[1] }}  </td> 
+                        <td >  {{ user[2] }}  </td> 
+                        <td >  {{ user[3] }}  </td> 
+                        <td >  {{ user[4] }}  </td> 
+                        <td >  {{ user[5] }}  </td> 
+                        <td >  {{ user[6] }}  </td> 
+                        <td >  {{ user[7] }}  </td> 
+                        <td >  {{ user[8] }}  </td> 
+                        <td >  {{ user[9] }}  </td> 
+                        <td >  {{ user[10] }}  </td>                        
+                </tr>
+                
+            {% endfor %}
+           
+        </tbody>
+    </table>
+
+{% endblock %}

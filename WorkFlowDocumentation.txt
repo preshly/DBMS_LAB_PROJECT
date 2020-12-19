@@ -49,67 +49,6 @@ Dirctory Structure:
 │   └── productTable2.png
 ├── static (#folder with static files.)
 │   ├── products (#folder containing the images used in the project.)
-│   │   ├── afterShokzAeropex.jpg
-│   │   ├── aftershokzTrekzTitanium.jpg
-│   │   ├── AmazonBasicsTool BagBackpack,.jpg
-│   │   ├── apple11.jpg
-│   │   ├── apple7.jpg
-│   │   ├── ArtisBT90WirelessPortableBluetoothSpeaker.jpg
-│   │   ├── boAtRockerz450.jpg
-│   │   ├── boAtStone1705WBluetoothSpeaker.jpg
-│   │   ├── CelloOasisCentreTable .jpg
-│   │   ├── CicadaPremiumHydraStainlessSteelDinningTable.jpg
-│   │   ├── ComfyBeanBagsFoldableLounger.jpg
-│   │   ├── CrafteniaWoodenFoldingSideTable .jpg
-│   │   ├── DagcrosMensBoysClassicHoodedTShirt.jpg
-│   │   ├── EdikoMensMeshSnapbackCap.jpg
-│   │   ├── ElkBoysTShirt.jpg
-│   │   ├── EYEBOGLERVNeckShawlCollarMensTShirt.jpg
-│   │   ├── FabSeasonsSolidPolyesterGolfFlatCap.jpg
-│   │   ├── FaburaaRioPremiumVelvetChair.jpg
-│   │   ├── HandcuffsAdjustableCap.jpg
-│   │   ├── HandcuffsUnisexCap.jpg
-│   │   ├── iBallMusiCubeX1WirelessUltraPortableBluetoothSpeakers.jpg
-│   │   ├── iluNYCap.jpg
-│   │   ├── InfinityJBLFuzePintDeepBassDualEQBluetooth.jpg
-│   │   ├── innovativeEdgeMensClassicFitTShirt.jpg
-│   │   ├── jblC100SI.jpg
-│   │   ├── LakdwoodWoodenandFabricBackrestAccentSofaChair.jpg
-│   │   ├── LordzVolleyballNiceSize4.jpg
-│   │   ├── LukeLillyBoysCutSewHalfSleeveCottonTshirts.jpg
-│   │   ├── lumifordUltimateU20.jpg
-│   │   ├── MBTCLapisFoldingTable.jpg
-│   │   ├── MOCABagSleeveAppleMacBook.jpg
-│   │   ├── MONCIMilestoneLaptopBackpacks.jpg
-│   │   ├── MSTimbersAndTheParekhDecoChair.jpg
-│   │   ├── NikeHandbag.jpg
-│   │   ├── NikeObsidianBlackWolfGreyBackpack.jpg
-│   │   ├── NiviaCratersMoldedVolleyball .jpg
-│   │   ├── NiviaShiningStarFootball .jpg
-│   │   ├── noiseShotsRush.jpg
-│   │   ├── nokiaAndroid.jpg
-│   │   ├── OGIOWomensHamptonsWindowpaneHandbag.jpg
-│   │   ├── oppoA12.jpg
-│   │   ├── oppoA5s.jpg
-│   │   ├── redmi8.jpg
-│   │   ├── redmiNote8Pro.jpg
-│   │   ├── samGalaxyM01.jpg
-│   │   ├── samGalaxyM31.jpg
-│   │   ├── SMTHandStichedFootballSize05.jpg
-│   │   ├── SolimoWandererMultiPurposeTable .jpg
-│   │   ├── SonySRS_XB23WirelessExtraBassBluetoothSpeaker.jpg
-│   │   ├── TommyHilfigerNavyLaptopBackpack.jpg
-│   │   ├── TyranTCap.jpg
-│   │   ├── VectorXSpikeRubberMouldedVolleyball .jpg
-│   │   ├── vivoV20.jpg
-│   │   ├── vivoY12.jpg
-│   │   ├── voodaniaTelstarCombowithPump .jpg
-│   │   ├── WildcraftBlackAndMelBackpack .jpg
-│   │   ├── WildcraftTurnaroundPolyesterBlueBag.jpg
-│   │   ├── ZachariasMenWoolenCapwithNeckwarmer.jpg
-│   │   ├── ZebronicsZebCountyBluetoothSpeaker.jpg
-│   │   ├── ZeroGravityRecliningLoungePortableChair.jpg
-│   │   └── zinqTechnologiesBeatle5155.jpg
 │   └── website.css (#css file used for the project.)
 ├── templates (#folder with the template html files of the project.)
 │   ├── admin_login.html
@@ -121,7 +60,135 @@ Dirctory Structure:
 └── WorkFlowDocumentation.txt (#time-wise work done documentation file.)
 
 Modified the erd and database model as per the requirement.
+
 Worked on the login and the signup forms for the customer. Integrated the froms with the database.
 Its working with a great effort.
 The user cannot use an email or username which is already been used, it will give error. 
 This I took beacuse of keeping username and email as primary keys in the customer table.
+There is also My Account link when the user signs up or links, whhich displays the details of the customer.
+
+Worked with customer cart.
+Customer can add an item to the cart, an item is added only onces to the cart. 
+If the customer adds the same product to the cart again, then it it show a notification that the item is already present in the cart.
+Customer can also remove the item from the cart.
+If the cart is empty, appropriate message is displayed that the cart is empty.
+If there are products in the cart then at the bottom of the cart page, a summary of the items is displayed.
+The summary contains each product name and the price. Also teh sub total of the items in the cart is also displayed.
+The cart is integrated with the database.
+When the customer adds product to the cart, the customer id and the product id are stored in the cart table in the database.
+When the customer deletes a product from the cart, teh same is reflected in the database.
+
+Whenever customer does some operation on the website, like login, signup, add or delete product from cart, the user gets notification on the screen.
+This is done using the alert() function in javascript.
+
+Worked on the admin side.
+For the admin, the reports are diplayed on the dashboard of the admin.
+The reports include filtering the customers based on their location, where they stay and also display how many products each customer have in their cart.
+There is also a navigation bar for the admin.
+The navbar includes the category, the frequently viewed products, all customers and all users.
+The category displayers all the cateogories of the products in teh DB.
+The frequently viewed products display those products which user add to their cart.
+The admin can also see all the users and their info.
+The admin can also see details of each individual product. Here the admin will see all the details of the product including description and the quantity of products available.
+
+Worked on orders of the customer.
+The customer can only order those products that are in the cart only.
+Individual items cannot be ordered seprately.
+Order is placed on all the products that are in the cart with quantity as one per item.
+
+The feature of canceling the order is not implemented.
+
+The admin can only view all the orders that are placed. 
+
+Features of the admin that are implemented:
+->login and logout of the admin from website
+->view the category
+->view num of products group by category
+->view all the products
+->view individual product details
+->view frequently_viewed_products, those products that customers add to their cart
+->view all the user details
+->view all the orders made by the customers.
+->dashboard containing insights.
+
+A lot of features for the admin that are in the erd and the use case diagram,
+like manage users, manage product, add/delete/update product, manage orders are not implemented.
+It needs more time and parctise of the tools used so that work is done faster.
+
+Features of the customer that are implemented:
+->login/logout
+->sign up
+->add/delete product from the cart
+->view the products
+->view individual product details
+->order items based on all the products present in the cart
+->view the orders
+->view the cart
+->view my account, i.e. the customer details
+
+Payment option is not implemented.
+
+Reports generated for the project are explained in the video.
+
+Final directory structure of the project:
+1911_DBS_LAB_PROJECT
+├── app.py (#main file to rn the server for the project.)
+|
+├── checker.py (# file used to create methods to check if teh customer or the admin is logged in to the website)
+|
+├── config.py (#configuration file containing the passwords and secret keys.)
+|
+├── Database (#folder containing the sql scripts used when executing the commands on MySql server.)
+│   └── createTables.sql (#used MySql workbench(mostly) and the terminal for the same.)
+|
+├── dbcm.py (#context manager file for datbase, connect to database, execute commands and close connection.)
+|
+├── Diagrams (#folder containing diagrams used in the project, Dia Diagram software was used to construct the diagrams.)
+|
+├── Final_Documentation.pdf (# pdf with the final documentation of the project)
+|
+├── Final_Documentation.pptx (# ppt of the final documentation of the project)
+|
+├── midReview.pdf (#mid review pdf)
+|
+├── midReview.pptx (#mid review ppt)
+|
+├── README.md (#file containin the details of the project.)
+|
+├── Screenshots (# folder containing the screenshots of the reuslts and teh table created)
+│   ├── Results (# folder containg screenshots of the final results)
+│   └── Table Created before Mid Demo (#folder containing the screenshots of the tables created in the database)
+|
+├── static (#folder with static files.)
+│   ├── products (#folder containing the images used in the project.)
+│   ├── web.js (#javascript file used for the project.)
+│   └── website.css (#css file used for the project.)
+|
+├── templates (#folder with the template html files of the project.)
+│   ├── admin_all_users.html
+│   ├── admin_category.html
+│   ├── admin_customer_orders.html
+│   ├── admin_frequent_products.html
+│   ├── admin.html
+│   ├── admin_login.html
+│   ├── admin_products.html
+│   ├── admin_view_product.html
+│   ├── base.html
+│   ├── customer_loggedin_home_page.html
+│   ├── customer_login.html
+│   ├── customer_view_product.html
+│   ├── my_account.html
+│   ├── my_cart.html
+│   ├── my_orders.html
+│   ├── signup.html
+│   └── website.html
+|
+├── videoLinks.txt (#file coontaining the video links of teh project)
+|
+└── WorkFlowDocumentation.txt (#time-wise work done documentation file.)
+
+Future scope of the project:
+->first of all complete the project
+->add all the features of the admin
+->add the payment method
+->increase the functionalities based on the requirements of the customer and the admin.

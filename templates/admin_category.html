@@ -1,0 +1,64 @@
+
+
+{% extends 'base.html' %}
+
+{% block body %}
+	<!-- all users page for the admin -->
+	<header class="website-header">
+		<div class="div-logo">
+			<a href = " {{ url_for('.dashboard') }} " class="logo-text"> Dashboard </a>
+		</div>
+		
+		<nav class="website-nav">
+            <a href = " {{ url_for('.admin_category') }} "> Product Category </a>
+			<a href = " {{ url_for('.all_products') }} "> Products </a>
+			<a href = " {{ url_for('.all_users') }} ">  Customers </a>
+			<a href = " {{ url_for('.frequent_products') }} ">Frequently Viewed Products </a>
+			<a href = " {{ url_for('.admin_customer_orders') }} "> All Orders  </a>
+			<a href = " {{ url_for('.admin_logout') }} "> Log out </a>
+		</nav>
+	</header>
+    
+    <br> <br> <br> <br>
+
+    <div class="txt-heading" > <p class="txt-heading"> Category of Products  </p>  </div>
+    <br>
+
+    <table class="tbl-cart table-css"  cellpadding="10px" cellspacing="1" align="center" style="border: 2px solid rgb(18, 7, 173);" >
+        <tbody>
+            {% for name in category %} 
+                <tr style="border: 2px solid rgb(18, 7, 173)" >              
+                    <td style="border: 2px solid rgb(18, 7, 173)" > 
+                        {{ name[0] | upper }}
+                    </td> 
+                </tr>                
+            {% endfor %}
+                     
+        </tbody>
+    </table>
+    <br> <br>
+    {% if categoryNoOfProducts %}
+     <div class="txt-heading" > <p class="txt-heading"> Number of Products Based on Category   </p>  </div>
+         <br>
+        <table class="tbl-cart table-css"  cellpadding="10px" cellspacing="1" align="center" style="border: 2px solid rgb(18, 7, 173);" >
+            <tbody>
+                <tr style="border: 2px solid rgb(18, 7, 173)">
+                    <td style="border: 2px solid rgb(18, 7, 173)"> Category Name</td>
+                    <td style="border: 2px solid rgb(18, 7, 173)"> Number of Products</td>
+                </tr>
+                {% for name in categoryNoOfProducts %} 
+                    <tr style="border: 2px solid rgb(18, 7, 173)" >              
+                        <td style="border: 2px solid rgb(18, 7, 173)" > 
+                            {{ name[0] | upper }}
+                        </td>
+                        <td style="border: 2px solid rgb(18, 7, 173)" > 
+                            {{ name[1] }}
+                        </td>  
+                    </tr>                
+                {% endfor %}
+                        
+            </tbody>
+        </table>
+    {% endif %}
+    <br> <br>
+{% endblock %}

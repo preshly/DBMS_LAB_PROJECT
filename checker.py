@@ -11,13 +11,12 @@ def is_customer_logged_in(f):
 
     return wrapper
 
-"""
-def not_customer_logged_in(f):
+def is_admin_logged_in(f):
     @wraps(f)
     def wrapper(*args, **kwargs):
-        if 'customer_logged_in' in session:
+        if 'admin_logged_in' in session:
             return f(*args, **kwargs)
-        return redirect(url_for('website'))
+        return redirect(url_for('admin_login'))
 
     return wrapper
-"""
+

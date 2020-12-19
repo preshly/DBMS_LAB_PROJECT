@@ -1,0 +1,59 @@
+
+
+{% extends 'base.html' %}
+
+{% block body %}
+	<!-- frequent products for the admin of the website website -->
+	<!-- all products page for the admin -->
+	<header class="website-header">
+		<div class="div-logo">
+			<a href = " {{ url_for('.dashboard') }} " class="logo-text"> Dashboard </a>
+		</div>
+		
+		<nav class="website-nav">
+			<a href = " {{ url_for('.admin_category') }} "> Product Category </a>
+			<a href = " {{ url_for('.all_products') }} "> Products </a>
+			<a href = " {{ url_for('.all_users') }} ">  Customers </a>
+			<a href = " {{ url_for('.frequent_products') }} ">Frequently Viewed Products </a>
+			<a href = " {{ url_for('.admin_customer_orders') }} "> All Orders  </a>
+			<a href = " {{ url_for('.admin_logout') }} "> Log out </a>
+		</nav>
+	</header>
+	
+	<div id="product-grid">
+
+		{% if frequentProducts %}
+			<div class="txt-heading"> Frequently Viewed Products </div>
+			<div> </div>
+			<br>
+			{% for product in frequentProducts %}
+				{% for item in frequentProducts[product] %}
+					<div class="product-item">
+						<form method="" action="">
+							<div class="product-image"> <img src="static/products/{{ item[0] }} " ></div>
+							<div class="product-tile-footer">
+								<a href="{{ url_for('.admin_view_product', code=item[3] ) }} "  style="color: black;" >
+									<div class="product-title" > {{ item[1] }} </div> 
+								</a>
+								<div class="product-price">&#8377; {{ item[2] }} </div>
+								<div class="cart-action">
+									
+									<input type="hidden" name="code" value="{{ item[3] }}"/>
+									<input type="text" class="product-quantity" name="quantity" value="1" size="2" />
+									<input type="hidden" id="imageName" name="imageName" value="{{ item[0] }}" />
+									<input type="hidden" id="productPrice" name="productPrice" value="{{ item[2] }}" />
+									
+								</div>
+							</div>
+						</form>
+					</div>
+				{% endfor %}
+			{% endfor %}
+			<div style="clear: both;"></div>
+			<br> <br> 
+			<hr>	
+			<br>
+		{% endif %}
+
+		
+{% endblock %}

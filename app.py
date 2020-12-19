@@ -3,22 +3,26 @@ from flask import Flask, render_template, request, session, redirect, url_for, f
 import config
 from dbcm import Usedatabase
 from passlib.hash import mysql41
-from checker import is_customer_logged_in
-#from forms import Customer_Signup
+from checker import is_customer_logged_in, is_admin_logged_in
+import mysql
 
+"""
+Initialize and set the secret key for the app.
+Also initialize the database configurations to app.config
+"""
 #define the app
 app = Flask(__name__)
 
 #secret key for the app to maintain session cookies
 app.secret_key = config.secret_key
 
-#app.config['UPLOADED_PHOTOS'] = 'static/products'
-
 #database configurations for the app
 app.config['dbconfig'] = config.dbconfig
 
 
-
+"""
+Below are the functions that are used in the methods for customers and the admin
+"""
 def insert_customer_to_db(user_details: list) -> None:
 	"""
 	function to enter the cunstomer details in the DB
@@ -50,30 +54,53 @@ def get_cutomer_id_from_db(username: str, email: str) -> int:
 
 def set_userid_to_flask_app_config(username: str, email: str, password: str) -> None:
 	"""
-	function to set the userid of the loggedin customer to the app.config
+	function to set the userid of the loggedin customer to the session
 	input: username, email. This is used to find the userid with the corresponding username and email
 	output: None
 	"""
 	idCustomer = get_cutomer_id_from_db(username, email)
 
-	#app.config['loggged_userid']
-	#app.config['loggged_username']
-	#app.config['logged_userpassword']
-
-
-
 	if idCustomer != None:
-		#app.config['loggged_userid'] = idCustomer
-		#app.config['loggged_username'] = username
-		#app.config['logged_userpassword'] = password
 		session['customer_logged_in'] = True
 		session['customer_id'] = idCustomer
 		session['customer_username'] = username
 		session['customer_email'] = email
 		session['customer_password'] = password
-		#print( app.config['loggged_userid'], app.config['loggged_username'] )
 
+def get_admin_id_from_db(username: str, email: str) -> int:
+	"""
+	function to get the admin id from the DB, with the input as username and email
+	input: username, email. This is used to find the admin id with the corresponding username and email
+	output: int(userID) if exists, else None
+	"""
+	with Usedatabase(app.config['dbconfig']) as cursor:
+		_SQL = """select idAdmin from admin where email=%s and username=%s; """
+		cursor.execute(_SQL, (email, username) )
+		idAdmin = cursor.fetchone()
+		if int(idAdmin[0]) > 0:
+			return int(idAdmin[0])
+		else:
+			return None
 
+def set_adminid_to_flask_app_config(username: str, email: str, password: str) -> None:
+	"""
+	function to set the admin id of the loggedin admin to the session
+	input: username, email. This is used to find the userid with the corresponding username and email
+	output: None
+	"""
+	idCustomer = get_admin_id_from_db(username, email)
+
+	if idCustomer != None:
+		session['admin_logged_in'] = True
+		session['admin_id'] = idCustomer
+		session['admin_username'] = username
+		session['admin_email'] = email
+		session['admin_password'] = password
+		#print(session['admin_id'])
+
+"""
+Below are all the methods that are related to teh customers of the website
+"""
 @app.route('/')
 def website() -> 'html':
 	"""
@@ -82,26 +109,104 @@ def website() -> 'html':
 	Select 4 products from the different range of product from each category available in the database.
 
 	"""
-	messages = []
+	#messages = []
 	with Usedatabase(app.config['dbconfig']) as cursor:
+		frequently_viewed_products = dict()
+		_SQL = """ select idProduct from cart group by idProduct order by rand() limit 4; """
+		cursor.execute(_SQL)
+		productIdDB = cursor.fetchall()
+
+		idProductDBList = list()
+		for id in productIdDB:
+			idProductDBList.append(id[0])
+
+		idProductDBTuple = tuple(idProductDBList)
+
+		for id in idProductDBTuple:
+			idSet = (id, )
+			_SQL = """select image, name, cost, idProduct from product where idProduct = %s ; """
+			cursor.execute(_SQL, idSet)
+			frequently_viewed_products[id] = cursor.fetchall()
+		
+		recently_ordered_products = dict()
+		_SQL = """ select idProduct from orders group by idProduct order by rand() limit 4; """
+		cursor.execute(_SQL)
+		productIdDB = cursor.fetchall()
+
+		idProductDBList = list()
+		for id in productIdDB:
+			idProductDBList.append(id[0])
+
+		idProductDBTuple = tuple(idProductDBList)
+
+		for id in idProductDBTuple:
+			idSet = (id, )
+			_SQL = """select image, name, cost, idProduct from product where idProduct = %s ; """
+			cursor.execute(_SQL, idSet)
+			recently_ordered_products[id] = cursor.fetchall()
+		
+		_SQL = """ select categoryName from category; """
+		cursor.execute(_SQL)
+		categoryNameDB = cursor.fetchall()
+
+		categoryNameDBList = list()
+		for name in categoryNameDB:
+			categoryNameDBList.append(name[0])
+
 		products = dict()
-		_SQL = """select image, name, cost from product where categoryName = 'smartphone' order by rand() limit 4; """
-		cursor.execute(_SQL)
-		#smartphone = cursor.fetchall()
-		products['smartphone'] = cursor.fetchall()
-
-		_SQL = """select image, name, cost from product where categoryName = 'earphones' order by rand() limit 4; """
-		cursor.execute(_SQL)
-		#earphones = cursor.fetchall()
-		products['earphones'] = cursor.fetchall()
-
-		_SQL = """select image, name, cost from product where categoryName = 'tshirt' order by rand() limit 4; """
-		cursor.execute(_SQL)
-		#tshirt = cursor.fetchall()
-		products['tshirt'] = cursor.fetchall()
+		for name in categoryNameDB:
+			_SQL = """select image, name, cost, idProduct from product where categoryName = %s order by rand() limit 4 ; """
+			cursor.execute(_SQL, name)
+			products[name] = cursor.fetchall()
 	
-	#return render_template('website.html', smartphone = smartphone, earphone = earphone, tshirt = tshirt)
-	return render_template('website.html', products = products, messages = messages)
+	return render_template('website.html', 
+		frequentProducts = frequently_viewed_products, 
+		recently_ordered_products = recently_ordered_products,
+		products = products)
+
+@app.route('/add_to_cart', methods=['GET', 'POST'])
+@is_customer_logged_in
+def add_product_to_cart():
+
+	code = int(request.form['code'])
+	#price = float(request.form['productPrice'])
+	#print(session['customer_id'])
+	idCustomer = session['customer_id']
+	#print(session['customer_username'])
+	#print(code)
+	#print(image)
+	#print(price)
+	#print(quantity)
+	#print(request.user_agent.browser)
+	#print(request.remote_addr)
+	#search_set = (image,)
+	#print(search_set)
+
+	idCustomer_search_set = (idCustomer, )
+	idCustomer_idProduct_insert_set = (idCustomer, code)
+
+	#messages = []
+	with Usedatabase(app.config['dbconfig']) as cursor:
+		try:
+			_SQL = """select idProduct from cart where idCustomer = %s;  """
+			cursor.execute(_SQL, (idCustomer_search_set))
+			idProductDB = cursor.fetchall()
+
+			#idProductDBList = list(idProductDB)
+			'''
+			if code in idProductDBList:
+				#flash("Item already present in the cart")
+				messages = ["Item already present in the cart"]
+			else:
+				'''
+			_SQL = """insert into cart (idCustomer, idProduct) values(%s, %s);  """
+			cursor.execute(_SQL, (idCustomer_idProduct_insert_set))
+			flash("Item added to cart")
+		except mysql.connector.errors.IntegrityError:
+			flash("Item already present in the cart")
+
+	return redirect(url_for('customer_loggedin_home_page'))
+
 
 @app.route('/signup', methods=['GET', 'POST'])
 #@is_customer_logged_in
@@ -110,8 +215,6 @@ def signup() -> 'html':
 	Output: signup page for the customer.
 	Display the sign up form for the new customers.
 	"""
-	#customer_signup_form = Customer_Signup(request.form.get(), csrf_enabled=False)
-	#if customer_signup_form.validate_on_submit():
 	messages = []
 	if request.method == 'POST':
 		firstName = request.form['firstname']
@@ -130,58 +233,40 @@ def signup() -> 'html':
 
 		for value in userDetails:
 			if not value:
-				#flash('Please fill all the details')
 				messages = ['Please fill all the details']
 				return render_template('signup.html', messages = messages)
 
-		#try:
+		
 		hash_password = mysql41.hash(password)
 		userDetails.remove(password)
 		userDetails.append(str(hash_password))
-		"""
-		except Exception:
-			flash('Please fill all the details ')
-			return render_template('signup.html')
-		"""
 
-		#print(firstName, lastName, email, contact, houseNO, street, city, state, country)
-		#print(firstName, username, password, hash_password)
 				
 		with Usedatabase(app.config['dbconfig']) as cursor:
-			#customers = dict()
+			
 			_SQL = """select email from customer; """
 			cursor.execute(_SQL)
 			emailsDB = cursor.fetchall()
-			#print(emailsDB)
-			#print(email in emailsDB)
-
+			
 			_SQL = """select username from customer; """
 			cursor.execute(_SQL)
 			usernamesDB = cursor.fetchall()
-			#print(usernamesDB)
-			#print(username in usernamesDB)
 
 			for un in usernamesDB:
-				#print(username == un[0])
 				if username == un[0]:					
-					#flash('Username or Email already taken')
 					messages = ['Username or Email already taken'] 
 					return render_template('signup.html', messages = messages)
 			
 			for em in emailsDB:
-				#print(email, em)
 				if email == em[0]:
-					#flash('Username or Email already taken')
 					messages = ['Username or Email already taken'] 
 					return render_template('signup.html', messages = messages)
 
 		insert_customer_to_db(userDetails)
 		
 		set_userid_to_flask_app_config(username, email, password)
-		#print( app.config['loggged_userid'], app.config['loggged_username'] )
-
+		
 		flash('Signup successful')
-		#messages = ['Signup successful']
 		return redirect(url_for('customer_loggedin_home_page' ))
 
 	return render_template('signup.html', messages = messages)
@@ -202,7 +287,6 @@ def customer_login() -> 'html':
 
 		for value in userDetails:
 			if not value:
-				#flash('Please fill all the details')
 				messages = ['Please fill all the details']
 				return render_template('customer_login.html', messages=messages)
 		
@@ -212,25 +296,14 @@ def customer_login() -> 'html':
 				loginDetailsDB = cursor.fetchall()
 
 				for un in loginDetailsDB:
-					#print(username == un[0])
 					if username == un[0]:					
-						#flash('Username or Email already taken')
 						if mysql41.verify(password, un[1]):						
 							flash('Login successful')
-							#messages = ['Login Successful']
 
 							set_userid_to_flask_app_config(un[0], un[2], password)
-
-							#print('login succes')
-
-							#print(session['customer_username'], session['customer_id'])
-							#print(session['customer_username'], session['customer_id'], session['customer_username'], session['customer_password'])
-							#print(type(app.config['loggged_userid']))
-							#print( app.config['loggged_userid'], app.config['loggged_username'] )
+							
 							return redirect(url_for('customer_loggedin_home_page'))
 			
-			
-				#flash('Invalid username or password')
 				messages = ['Invalid username or password']
 	return render_template('customer_login.html', messages=messages)
 
@@ -239,6 +312,7 @@ def customer_login() -> 'html':
 def customer_logout():
 	if 'customer_logged_in' in session:
 		#session.clear()
+		#session['customer_logged_in'] = False
 		session.pop('customer_logged_in')
 		session.pop('customer_id')
 		session.pop('customer_username')
@@ -256,23 +330,231 @@ def customer_loggedin_home_page() -> 'html':
 	This method is called only when the customer is logged in to the website
 	"""
 	with Usedatabase(app.config['dbconfig']) as cursor:
+		frequently_viewed_products = dict()
+		_SQL = """ select idProduct from cart group by idProduct order by rand() limit 4; """
+		cursor.execute(_SQL)
+		productIdDB = cursor.fetchall()
+
+		idProductDBList = list()
+		for id in productIdDB:
+			idProductDBList.append(id[0])
+
+		idProductDBTuple = tuple(idProductDBList)
+
+		for id in idProductDBTuple:
+			idSet = (id, )
+			_SQL = """select image, name, cost, idProduct from product where idProduct = %s ; """
+			cursor.execute(_SQL, idSet)
+			frequently_viewed_products[id] = cursor.fetchall()
+		
+
+		recently_ordered_products = dict()
+		_SQL = """ select idProduct from orders group by idProduct order by rand() limit 4; """
+		cursor.execute(_SQL)
+		productIdDB = cursor.fetchall()
+
+		idProductDBList = list()
+		for id in productIdDB:
+			idProductDBList.append(id[0])
+
+		idProductDBTuple = tuple(idProductDBList)
+
+		for id in idProductDBTuple:
+			idSet = (id, )
+			_SQL = """select image, name, cost, idProduct from product where idProduct = %s ; """
+			cursor.execute(_SQL, idSet)
+			recently_ordered_products[id] = cursor.fetchall()
+
+		_SQL = """ select categoryName from category; """
+		cursor.execute(_SQL)
+		categoryNameDB = cursor.fetchall()
+
+		categoryNameDBList = list()
+		for name in categoryNameDB:
+			categoryNameDBList.append(name[0])
+
 		products = dict()
-		_SQL = """select image, name, cost from product where categoryName = 'smartphone' order by rand() limit 4; """
-		cursor.execute(_SQL)
-		#smartphone = cursor.fetchall()
-		products['smartphone'] = cursor.fetchall()
-
-		_SQL = """select image, name, cost from product where categoryName = 'earphones' order by rand() limit 4; """
-		cursor.execute(_SQL)
-		#earphones = cursor.fetchall()
-		products['earphones'] = cursor.fetchall()
-
-		_SQL = """select image, name, cost from product where categoryName = 'tshirt' order by rand() limit 4; """
-		cursor.execute(_SQL)
-		#tshirt = cursor.fetchall()
-		products['tshirt'] = cursor.fetchall()
+		for name in categoryNameDB:
+			_SQL = """select image, name, cost, idProduct from product where categoryName = %s order by rand() limit 4 ; """
+			cursor.execute(_SQL, name)
+			products[name] = cursor.fetchall()
 	
-	return render_template('customer_loggedin_home_page.html', products = products)
+	return render_template('customer_loggedin_home_page.html', 
+		frequentProducts = frequently_viewed_products, 
+		recently_ordered_products = recently_ordered_products,
+		products = products)
+
+@app.route('/my_cart')
+@is_customer_logged_in
+def my_cart() -> 'html':
+	"""
+	output the products from the user's cart from database to the webpage
+	"""
+	
+	with Usedatabase(app.config['dbconfig']) as cursor:
+		idCustomer = session['customer_id']
+		idCustomer_search_set = (idCustomer, )
+		
+		
+		_SQL = """select idProduct from cart where idCustomer = %s;  """
+		cursor.execute(_SQL, (idCustomer_search_set))
+		idProductDB = cursor.fetchall()
+
+		idProductDBList = list()
+		for id in idProductDB:
+			idProductDBList.append(id[0])
+
+		idProductDBTuple = tuple(idProductDBList)
+
+		products = dict()
+		for id in idProductDBTuple:
+			id_set = (id, )
+			_SQL = """select image, name, cost, idProduct from product where idProduct = %s ; """
+			cursor.execute(_SQL, id_set)
+			products[id] =  cursor.fetchall()
+		
+		#print(products)
+		subTotal = 0
+		for pro in products:
+			subTotal = float(subTotal) + products[pro][0][2]
+		
+		if len(products) != 0:
+			return render_template('my_cart.html', products=products, subTotal = subTotal)
+		else:
+			#flash('You\'re cart is empty')
+			messages=['You\'re cart is empty']
+		return render_template('my_cart.html',messages = messages, products=products)
+
+@app.route('/customer_order' , methods=['GET', 'POST'])
+@is_customer_logged_in
+def customer_order() -> 'html':
+	"""
+	Manage orders of the customer.
+	Insert the details of teh order to the database.
+	Output: after inserting the products in the DB, return the home page of teh customer.
+	"""
+	subTotal = float(request.form['subTotal'])
+	ipAddress = request.remote_addr
+	#print(subTotal, ipAddress)
+
+	with Usedatabase(app.config['dbconfig']) as cursor:
+		idCustomer = session['customer_id']
+		idCustomer_search_set = (idCustomer, )
+				
+		_SQL = """select idProduct from cart where idCustomer = %s;  """
+		cursor.execute(_SQL, (idCustomer_search_set))
+		idProductDB = cursor.fetchall()
+
+		idProductDBList = list()
+		for id in idProductDB:
+			idProductDBList.append(id[0])
+
+		idProductDBTuple = tuple(idProductDBList)
+
+		for id in idProductDBTuple:
+			id_set = (id, )
+			_SQL = """select cost from product where idProduct = %s ; """
+			cursor.execute(_SQL, id_set)
+			cost =  cursor.fetchone()[0]
+
+			order_set = (idCustomer, id, 1, cost, ipAddress, )
+			#print(order_set)
+
+			_SQL = """insert into orders(idCustomer, idProduct, quantity, subTotal, remoteIPAddress) values(%s,%s,%s,%s,%s); """
+			cursor.execute(_SQL, order_set)
+
+			_SQL = """delete from cart where idProduct = %s ; """
+			cursor.execute(_SQL, id_set)
+	flash('Order Successfully placed')
+	return redirect(url_for('customer_loggedin_home_page'))
+
+@app.route('/my_orders')
+@is_customer_logged_in
+def my_orders() -> 'html':
+	"""
+	output the products from the user has ordered from database to the webpage
+	output: all teh products that are ordered by the customer
+	"""
+	
+	with Usedatabase(app.config['dbconfig']) as cursor:
+		idCustomer = session['customer_id']
+		idCustomer_search_set = (idCustomer, )
+		
+		
+		_SQL = """select idProduct from orders where idCustomer = %s;  """
+		cursor.execute(_SQL, (idCustomer_search_set))
+		idProductDB = cursor.fetchall()
+
+		idProductDBList = list()
+		for id in idProductDB:
+			idProductDBList.append(id[0])
+
+		idProductDBTuple = tuple(idProductDBList)
+
+		products = dict()
+		for id in idProductDBTuple:
+			id_set = (id, )
+			_SQL = """select image, name, cost, idProduct from product where idProduct = %s ; """
+			cursor.execute(_SQL, id_set)
+			products[id] =  cursor.fetchall()
+		
+		#print(products)
+		'''
+		subTotal = 0
+		for pro in products:
+			subTotal = float(subTotal) + products[pro][0][2]
+		'''
+		if len(products) != 0:
+			return render_template('my_orders.html', products=products)
+		else:
+			#flash('You\'re cart is empty')
+			messages=['You don\'t have any orders']
+		return render_template('my_orders.html',messages = messages, products=products)
+
+
+@app.route('/delete_product_from_cart/<string:code>', methods=['GET', 'POST'])
+@is_customer_logged_in
+def delete_product_from_cart(code) -> 'html':
+	"""
+	Delete the product with the code from teh customer cart which is deleted.
+	The is reflected in the DB and also on the my_cart webpage
+	"""
+	
+	idCustomer = session['customer_id']
+	#print(idCustomer)
+	with Usedatabase(app.config['dbconfig']) as cursor:
+		#code_set = (code, )
+		_SQL = """delete from cart where idProduct = %s and idCustomer = %s;  """
+		
+		cursor.execute(_SQL, (code, idCustomer))
+		flash("Item removed from cart")
+
+	return redirect(url_for('my_cart'))
+
+@app.route('/customer_view_product/<string:code>', methods=['GET', 'POST'])
+@is_customer_logged_in
+def customer_view_product(code) -> 'html':
+	"""
+	Display the individual product info.
+	all the product details are displayed including the desctipiton and the category of the product .
+	return: webpage with the product details.
+	"""
+	product = dict()
+	with Usedatabase(app.config['dbconfig']) as cursor:
+		code_set = (code, )
+		_SQL = """select image, name, cost, description, categoryName, idProduct from product where idProduct = %s ; """
+		
+		cursor.execute(_SQL, code_set)
+		product[int(code)] = cursor.fetchone()
+		
+	return render_template('customer_view_product.html',
+		image=product[int(code)][0],
+		name=product[int(code)][1],
+		price=product[int(code)][2],
+		desc = product[int(code)][3],
+		category = product[int(code)][4],
+		code=product[int(code)][5] )
+
 
 @app.route('/my_account')
 @is_customer_logged_in
@@ -301,15 +583,257 @@ def my_account() -> 'html':
 	return render_template('my_account.html', userDetails = userDetailsList)
 
 
-@app.route('/admin_login')
+"""
+Below are all the methods that are related to the admin
+"""
+@app.route('/admin_login', methods=['GET', 'POST'])
 def admin_login() -> 'html':
 	"""
 	Output: login page for the admin.
-	Display the log in form  for the admin of the website.
+	Display the log-in form  for the admin of the website.
 	"""
+	
+	#messages = []
+	if request.method == 'POST':
+		username = request.form['username']
+		password = request.form['password']
+
+		userDetails = [username, password]
+
+		for value in userDetails:
+			if not value:
+				flash('Please fill all the details')
+				#messages = ['Please fill all the details']
+				return render_template('admin_login.html')
+		
+		with Usedatabase(app.config['dbconfig']) as cursor:
+				_SQL = """select username, password, email from admin; """
+				cursor.execute(_SQL)
+				loginDetailsDB = cursor.fetchall()
+
+				for un in loginDetailsDB:					
+					if username == un[0]:					
+						#flash('Username or Email already taken')
+						#if mysql41.verify(password, un[1]):
+						if password == un[1]:						
+							flash('Login successful')
+
+							set_adminid_to_flask_app_config(un[0], un[2], password)
+
+							return redirect(url_for('dashboard'))
+			
+			
+		flash('Invalid username or password')
+		#messages = ['Invalid username or password'] , messages=messages
 	return render_template('admin_login.html')
 
+@app.route('/admin_logout')
+@is_admin_logged_in
+def admin_logout() -> 'html':
+	"""
+	The admin logouts out of the website.
+	Here the details of the admin from the session are cleared.
+	Return: the login page of the admin.
+	"""
+	if 'admin_logged_in' in session:
+		#session.clear()
+		#session['admin_logged_in'] = False
+		session.pop('admin_logged_in')
+		session.pop('admin_id')
+		session.pop('admin_username')
+		session.pop('admin_email')
+		session.pop('admin_password')
+		flash('You are logged out')
+		#messages = ['You are logged out']
+		#return redirect(url_for('admin') )
+	return redirect(url_for('admin_login'))
 
+@app.route('/dashboard')
+@is_admin_logged_in
+def dashboard() -> 'html':
+	"""
+	Display the dashboard for the admin
+	"""
+	
+	with Usedatabase(app.config['dbconfig']) as cursor:
+		_SQL = """ select streetOrvillage, count(streetOrvillage) from customer group by streetOrvillage; """	
+		cursor.execute(_SQL)
+		street = cursor.fetchall()
+		#print(data)
+		_SQL = """ select cityOrTown, count(cityOrTown) from customer group by cityOrTown; """	
+		cursor.execute(_SQL)
+		city = cursor.fetchall()
+
+		_SQL = """ select state, count(state) from customer group by state; """	
+		cursor.execute(_SQL)
+		state = cursor.fetchall()
+
+		_SQL = """ select country, count(country) from customer group by country; """	
+		cursor.execute(_SQL)
+		country = cursor.fetchall()
+
+		
+		_SQL = """ select customer.username, count(cart.idProduct) from 
+			customer, cart where customer.idCustomer=cart.idCustomer group by customer.username; """	
+		cursor.execute(_SQL)
+		d1 = cursor.fetchall()
+
+		_SQL = """ select customer.username, count(orders.idProduct) from 
+			customer, orders where customer.idCustomer=orders.idCustomer group by customer.username; """	
+		cursor.execute(_SQL)
+		d2 = cursor.fetchall()
+
+	return render_template('admin.html', 
+		street=street, 
+		city=city, 
+		state=state, 
+		country=country, 
+		productInCustomerCart=d1,
+		orderedproducts=d2)
+
+@app.route('/admin_view_product/<string:code>', methods=['GET', 'POST'])
+@is_admin_logged_in
+def admin_view_product(code) -> 'html':
+	"""
+	Display the individual product info.
+	all the product details are displayed including teh desctipiton, category of the product and the quantity available.
+	return: webpage with the product details.
+	"""
+	product = dict()
+	with Usedatabase(app.config['dbconfig']) as cursor:
+		code_set = (code, )
+		_SQL = """select image, name, cost, description, categoryName, idProduct, quantityAvailable from product where idProduct = %s ; """
+		
+		cursor.execute(_SQL, code_set)
+		product[int(code)] = cursor.fetchone()
+		
+	return render_template('admin_view_product.html',
+		image=product[int(code)][0],
+		name=product[int(code)][1],
+		price=product[int(code)][2],
+		desc = product[int(code)][3],
+		category = product[int(code)][4],
+		code=product[int(code)][5],
+		quantity=product[int(code)][6] )
+
+@app.route('/all_products')
+@is_admin_logged_in
+def all_products() -> 'html':
+	"""
+	Display all the products prsent in the database to the admin
+	output: webpage containing all the products
+	"""
+
+	with Usedatabase(app.config['dbconfig']) as cursor:
+		_SQL = """ select categoryName from category; """
+		cursor.execute(_SQL)
+		categoryNameDB = cursor.fetchall()
+
+		categoryNameDBList = list()
+		for name in categoryNameDB:
+			categoryNameDBList.append(name[0])
+
+		products = dict()
+		for name in categoryNameDB:
+			_SQL = """select image, name, cost, idProduct, quantityAvailable from product where categoryName = %s order by rand() ; """
+			cursor.execute(_SQL, name)
+			products[name] = cursor.fetchall()
+	
+	return render_template('admin_products.html', products = products)
+
+@app.route('/frequent_products')
+@is_admin_logged_in
+def frequent_products() -> 'html':
+	"""
+	Display the frequently viewed products (those in the cart) by the customers to the admin 
+	output: webpage containing freqeuntly viewed products
+	"""
+
+	frequently_viewed_products = dict()
+	with Usedatabase(app.config['dbconfig']) as cursor:
+		_SQL = """ select idProduct from cart group by idProduct order by rand() ; """
+		cursor.execute(_SQL)
+		productIdDB = cursor.fetchall()
+
+		idProductDBList = list()
+		for id in productIdDB:
+			idProductDBList.append(id[0])
+
+		idProductDBTuple = tuple(idProductDBList)
+
+		for id in idProductDBTuple:
+			idSet = (id, )
+			_SQL = """select image, name, cost, idProduct from product where idProduct = %s ; """
+			cursor.execute(_SQL, idSet)
+			frequently_viewed_products[id] = cursor.fetchall()
+	
+	return render_template('admin_frequent_products.html', frequentProducts = frequently_viewed_products)
+
+@app.route('/admin_customer_orders')
+@is_admin_logged_in
+def admin_customer_orders() -> 'html':
+	"""
+	Display all the ordered product details by the customers to the admin 
+	output: webpage containing all the ordereded products detials
+	"""
+
+	with Usedatabase(app.config['dbconfig']) as cursor:
+		#users = dict()
+		#_SQL = """select image, name, cost, idProduct, quantityAvailable from product where categoryName = 'smartphone' order by rand() ; """
+		_SQL = """select  
+					idOrder, idCustomer, idProduct, quantity, orderTime, subTotal, remoteIPAddress, status
+					from orders;
+					"""
+		cursor.execute(_SQL)
+		
+		orders = cursor.fetchall()
+	
+	
+	return render_template('admin_customer_orders.html', orders = orders)
+
+@app.route('/admin_category')
+@is_admin_logged_in
+def admin_category() -> 'html':
+	"""
+	Display the category of the products to the admin
+	Also displays the number of products in the DB based on the cateory
+	Return: webpage with category details
+	"""
+	with Usedatabase(app.config['dbconfig']) as cursor:
+		_SQL = """select categoryName from category;"""
+		cursor.execute(_SQL)
+		
+		category = cursor.fetchall()
+
+		_SQL = """select categoryName, count(idProduct) from product group by categoryName;"""
+		cursor.execute(_SQL)
+		
+		categoryNoOfProducts = cursor.fetchall()
+	
+	return render_template('admin_category.html', category = category, categoryNoOfProducts=categoryNoOfProducts)
+
+
+@app.route('/all_users')
+@is_admin_logged_in
+def all_users() -> 'html':
+	"""
+	Display all the customer details to the admin
+	Output: The customer details are displayed in the form of table on the webpage
+	"""
+
+	with Usedatabase(app.config['dbconfig']) as cursor:
+		#users = dict()
+		#_SQL = """select image, name, cost, idProduct, quantityAvailable from product where categoryName = 'smartphone' order by rand() ; """
+		_SQL = """select  
+					idCustomer, email, firstName, lastName, contact, houseNoOrFlatNo, streetOrvillage, cityOrTown, state, country, username
+					from customer
+					"""
+		cursor.execute(_SQL)
+		
+		users = cursor.fetchall()
+
+	
+	return render_template('admin_all_users.html', users = users)
 
 #run the app
 if __name__ == '__main__':

@@ -1,0 +1,170 @@
+
+{% extends 'base.html' %}
+
+{% block body %}
+	<!-- Dashboard page for the admin -->
+	<header class="website-header">
+		<div class="div-logo">
+			<a href = " {{ url_for('.dashboard') }} " class="logo-text"> Dashboard </a>
+		</div>
+		
+		<nav class="website-nav">
+			<a href = " {{ url_for('.admin_category') }} "> Product Category </a>
+			<a href = " {{ url_for('.all_products') }} "> Products </a>
+			<a href = " {{ url_for('.all_users') }} ">  Customers </a>
+			<a href = " {{ url_for('.frequent_products') }} ">Frequently Viewed Products </a>
+			<a href = " {{ url_for('.admin_customer_orders') }} "> All Orders  </a>
+			<a href = " {{ url_for('.admin_logout') }} "> Log out </a>
+		</nav>
+	</header>
+	
+	{% with messages = get_flashed_messages() %}  
+		{% if messages %}  
+			{% for message in messages %}  
+				{% if message == 'Login successful' %}
+				    <script> alert('Login successful') </script>				
+				{% endif %}
+			{% endfor %}  
+		{% endif %}  
+	{% endwith %}
+	
+	<br> <br> <br> <br>
+	{% if street %}
+		<div class="txt-heading" > <p class="txt-heading"> Filter Customers Based on Street or Village </p>  </div>
+		<br>
+		<div style="clear: both;"> 
+			<table class="tbl-cart table-css"  cellpadding="10px" cellspacing="1"  class="center" align="center">
+				<tbody> 
+					<tr> 
+						<th>Street Or Village</th>
+						<th >No. Of Customers</th>
+					</tr>
+					{% for str in street %}					
+						<tr>         
+							<td >  {{ str[0] }}  </td>
+							<td >  {{ str[1] }}  </td> 
+														
+						</tr>					
+					{% endfor %}			
+				</tbody>
+			</table>
+		</div>
+	{% endif %}
+
+	<br> <br> 
+	{% if city %}
+		<div class="txt-heading" > <p class="txt-heading"> Filter Customers Based on City or Town </p>  </div>
+		<br>
+		<div style="clear: both;"> 
+			<table class="tbl-cart table-css"  cellpadding="10px" cellspacing="1" class="center" align="center">
+				<tbody> 
+					<tr>
+						<th>Ciry Or Town</th>
+						<th >No. Of Customers</th>
+					</tr>
+					{% for str in city %}					
+						<tr>         
+							<td >  {{ str[0] }}  </td>
+							<td >  {{ str[1] }}  </td> 
+														
+						</tr>					
+					{% endfor %}			
+				</tbody>
+			</table>
+		</div>
+	{% endif %}
+
+	<br> <br> 
+	{% if state %}
+		<div class="txt-heading" > <p class="txt-heading"> Filter Customers Based on State </p>  </div>
+		<br>
+		<div style="clear: both;"> 
+			<table class="tbl-cart table-css"  cellpadding="10px" cellspacing="1" class="center" align="center">
+				<tbody> 
+					<tr> 
+						<th> State</th>
+						<th >No. Of Customers</th>
+					</tr>
+					{% for str in state %}					
+						<tr>         
+							<td >  {{ str[0] }}  </td>
+							<td >  {{ str[1] }}  </td> 
+														
+						</tr>					
+					{% endfor %}			
+				</tbody>
+			</table>
+		</div>
+	{% endif %}
+	<br> <br> 
+	{% if country %}
+		<div class="txt-heading" > <p class="txt-heading"> Filter Customers Based on Country </p>  </div>
+		<br>
+		<div style="clear: both;"> 
+			<table class="tbl-cart table-css"  cellpadding="10px" cellspacing="1" class="center" align="center">
+				<tbody>
+					<tr> 
+						<th>Country</th>
+						<th >No. Of Customers</th>
+					</tr>
+					{% for str in country %}					
+						<tr>         
+							<td >  {{ str[0] }}  </td>
+							<td >  {{ str[1] }}  </td> 
+														
+						</tr>					
+					{% endfor %}			
+				</tbody>
+			</table>
+		</div>
+	{% endif %}
+	<br>
+	<hr>
+	 <br> 
+	
+	{% if productInCustomerCart %}
+		<div class="txt-heading" > <p class="txt-heading"> Number of Products in Customer cart </p>  </div>
+		<br>
+		<div style="clear: both;"> 
+			<table class="tbl-cart table-css"  cellpadding="10px" cellspacing="1" class="center" align="center">
+				<tbody> 
+					<tr> 
+						<th>Username </th>
+						<th >No. Of Products In Cart</th>
+					</tr>
+					{% for str in productInCustomerCart %}					
+						<tr>         
+							<td >  {{ str[0] }}  </td>
+							<td >  {{ str[1] }}  </td> 
+														
+						</tr>					
+					{% endfor %}			
+				</tbody>
+			</table>
+		</div>
+	{% endif %}
+
+	{% if orderedproducts %}
+		<div class="txt-heading" > <p class="txt-heading"> Number of Products Customer has ordered </p>  </div>
+		<br>
+		<div style="clear: both;"> 
+			<table class="tbl-cart table-css"  cellpadding="10px" cellspacing="1" class="center" align="center">
+				<tbody> 
+					<tr> 
+						<th>Username </th>
+						<th >No. Of Products Ordered</th>
+					</tr>
+					{% for str in orderedproducts %}					
+						<tr>         
+							<td >  {{ str[0] }}  </td>
+							<td >  {{ str[1] }}  </td> 
+														
+						</tr>					
+					{% endfor %}			
+				</tbody>
+			</table>
+		</div>
+	{% endif %}
+	
+	<br> <br>
+{% endblock %}

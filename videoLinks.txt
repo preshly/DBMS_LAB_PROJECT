@@ -5,3 +5,7 @@ Video links for the project:
 		Kindly Note: In the video for erd, the relationship between product and category is explained as one to one.
 		It should be many to one, as many products can belong to a category, as I realised it later. I have made the changes in the erd.
 
+	2)Final Demo:
+		https://youtu.be/7uD3ll0zupY
+		In the video I forgot to mention that the passwords of the user only are stored by hashing using passlib.hash package in Python.
+

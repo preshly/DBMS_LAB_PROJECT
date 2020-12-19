@@ -1,0 +1,57 @@
+
+
+{% extends 'base.html' %}
+
+{% block body %}
+	<!-- all users page for the admin -->
+	<header class="website-header">
+		<div class="div-logo">
+			<a href = " {{ url_for('.dashboard') }} " class="logo-text"> Dashboard </a>
+		</div>
+		
+		<nav class="website-nav">
+            <a href = " {{ url_for('.admin_category') }} "> Product Category </a>
+			<a href = " {{ url_for('.all_products') }} "> Products </a>
+			<a href = " {{ url_for('.all_users') }} ">  Customers </a>
+			<a href = " {{ url_for('.frequent_products') }} ">Frequently Viewed Products </a>
+			<a href = " {{ url_for('.admin_customer_orders') }} "> All Orders  </a>
+			<a href = " {{ url_for('.admin_logout') }} "> Log out </a>
+		</nav>
+	</header>
+    
+    <br> <br> <br> <br>
+
+    <div class="txt-heading" > <p class="txt-heading"> All Orders  </p>  </div>
+    <br>
+
+    <table class="tbl-cart table-css"  cellpadding="10px" cellspacing="1" align="center">
+        <tbody> 
+            <tr> 
+                <th>Order ID</th>
+                <th >Customer ID</th>
+                <th >Product ID</th>
+                <th >Quantity </th>
+                <th >Order Time </th>
+                <th >Sub Totak</th>
+                <th >Device IP </th>
+                <th >Status </th>
+            </tr>
+            {% for order in orders %}
+                 
+                <tr>         
+                    <td >  {{ order[0] }}  </td>
+                    <td >  {{ order[1] }}  </td> 
+                    <td >  {{ order[2] }}  </td> 
+                    <td >  {{ order[3] }}  </td> 
+                    <td >  {{ order[4] }}  </td> 
+                    <td >  {{ order[5] }}  </td> 
+                    <td >  {{ order[6] }}  </td> 
+                    <td >  {{ order[7] }}  </td>                          
+                </tr>
+                
+            {% endfor %}
+           
+        </tbody>
+    </table>
+
+{% endblock %}

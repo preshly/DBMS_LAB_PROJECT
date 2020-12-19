@@ -168,6 +168,8 @@ a:hover{
 }
 
 #product-grid .txt-heading {
+	position: relative;
+	top: 50px;
 	margin-bottom: 18px;
 	text-align: center;
 	font-weight: bold;
@@ -213,6 +215,12 @@ a:hover{
 	float:left;
 }
 
+.product-quantity {
+    padding: 5px 10px;
+    border-radius: 3px;
+    border: #E0E0E0 1px solid;
+}
+
 .cart-action {
 	float: right;
 }
@@ -228,4 +236,71 @@ a:hover{
     text-decoration: none;
     border-radius: 3px;
     cursor: pointer;
+}
+
+hr{
+	clear: both;
+}
+
+.order-total-txt-heading{
+	position: relative;
+	top: 50px;
+	margin-bottom: 18px;
+	text-align: center;
+	font-weight: bold;
+	font-size: x-large;
+
+}
+
+.txt-heading{
+	position: relative;
+	margin-bottom: 18px;
+	text-align: center;
+	font-weight: bold;
+	font-size: x-large;
+
+}
+
+.tbl-cart {
+	font-size: 0.9em;
+	
+}
+
+.tbl-cart th {
+	font-weight: normal;
+	font-size: large;
+}
+
+.table-css{
+	/*width: 100%; */
+	border: 2px solid rgb(18, 7, 173);
+	font-family: "Arial Black", "Georgia", "sans-serif";
+	text-align: center;
+}
+
+
+.table-css th{
+	background-color: rgb(102, 77, 214);
+	/*height: 50px; style="text-align:center;" */
+	font-size: 22px;
+	color: rgb(3, 3, 3);
+	width: max-content;
+	
+}
+
+.table-css td{
+	/*height: 50px; */
+	width: max-content;
+	font-size: 15px;
+	color: rgb(0, 0, 0);
+
+}
+
+.center table{
+	/*margin-left: auto;
+	margin-right: auto;
+	*/
+	text-align: center;
+	margin: 0 auto;
+	
 }

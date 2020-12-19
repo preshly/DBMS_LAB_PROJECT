@@ -9,6 +9,8 @@
 		</div>
 		
 		<nav class="website-nav">
+			<a href = " {{ url_for('.my_orders') }} "> My Orders </a>
+			<a href = " {{ url_for('.my_cart') }} "> My Cart </a>
 			<a href = " {{ url_for('.my_account') }} "> My Account </a>
 			<a href = " {{ url_for('.customer_logout') }} "> Log out </a>
 		</nav>
@@ -22,36 +24,118 @@
 				
 				{% elif message == 'Signup successful' %}
 					<script> alert('Signup successful') </script>
+				{% elif message == 'Item already present in the cart' %}
+					<script> alert('Item already present in the cart') </script>
+				{% elif message == 'Item added to cart' %}
+					<script> alert('Item added to cart') </script>
+				{% elif message == 'Order Successfully placed' %}
+					<script> alert('Order Successfully placed') </script>
 				{% endif %}
 			{% endfor %}  
 		{% endif %}  
     {% endwith %}
 	
-	{% if messages %}
-		{% for message in messages %}
-			{% if message == 'Signup successful' %}
-				<script> alert('Signup successful') </script>
-			{% endif %}
-		{% endfor %}
-	{% endif %}
-
 	<div id="product-grid">
 		<div class="txt-heading"> Products </div>
+		<div> </div>
+		<br> <br>
+
+		
+		{% if frequentProducts %}
+			<div class="txt-heading"> Frequently Viewed Products </div>
+			<div> </div>
+			<br>
+			{% for product in frequentProducts %}
+				{% for item in frequentProducts[product] %}
+					<div class="product-item">
+						<form method="POST" action="/add_to_cart">
+							<div class="product-image"> <img src="static/products/{{ item[0] }} " ></div>
+							<div class="product-tile-footer">
+								<a href="{{ url_for('.customer_view_product', code=item[3] ) }} "  style="color: black;" >
+									<div class="product-title" > {{ item[1] }} </div> 
+								</a>
+								<div class="product-price">&#8377; {{ item[2] }} </div>
+								<div class="cart-action">
+									
+									<input type="hidden" name="code" value="{{ item[3] }}"/>
+									<!-- <input type="text" class="product-quantity" name="quantity" value="1" size="2" />-->
+									<input type="hidden" id="imageName" name="imageName" value="{{ item[0] }}" />
+									<input type="hidden" id="productPrice" name="productPrice" value="{{ item[2] }}" />
+									<input type="submit" value="Add to Cart" class="btnAddAction" />
+								</div>
+							</div>
+						</form>
+					</div>
+				{% endfor %}
+			{% endfor %}
+			<div style="clear: both;"></div>
+			<br> <br> 
+			<hr>	
+			<br>
+		{% endif %}
+
+		{% if recently_ordered_products %}
+			<div class="txt-heading"> Recently Ordered Products</div>
+			<div> </div>
+			<br>
+			{% for product in recently_ordered_products %}
+				{% for item in recently_ordered_products[product] %}
+					<div class="product-item">
+						<form method="POST" action="/add_to_cart">
+							<div class="product-image"> <img src="static/products/{{ item[0] }} " ></div>
+							<div class="product-tile-footer">
+								<a href="{{ url_for('.customer_view_product', code=item[3] ) }} "  style="color: black;" >
+									<div class="product-title" > {{ item[1] }} </div> 
+								</a>
+								<div class="product-price">&#8377; {{ item[2] }} </div>
+								<div class="cart-action">
+									
+									<input type="hidden" name="code" value="{{ item[3] }}"/>
+									<!-- <input type="text" class="product-quantity" name="quantity" value="1" size="2" />-->
+									<input type="hidden" id="imageName" name="imageName" value="{{ item[0] }}" />
+									<input type="hidden" id="productPrice" name="productPrice" value="{{ item[2] }}" />
+									<input type="submit" value="Add to Cart" class="btnAddAction" />
+								</div>
+							</div>
+						</form>
+					</div>
+				{% endfor %}
+			{% endfor %}
+			<div style="clear: both;"></div>
+			<br> <br> 
+			<hr>	
+			<br>
+		{% endif %}
+
 		{% for product in products %}
+			<div class="txt-heading"> 
+				{% for char in product %}
+					{{ char.upper() }}
+				{% endfor %}	
+			</div>
+			<br>
 			{% for item in products[product] %}
 				<div class="product-item">
-					<form method="post" action=" ">
-						<div class="product-image"> <img src="static/products/{{ item[0] }} " ></div>
+					<form method="POST" action="/add_to_cart">
+						<div class="product-image"> <img src="/static/products/{{ item[0] }} " ></div>
 						<div class="product-tile-footer">
-							<div class="product-title"> {{ item[1] }} </div>
+							<a href="{{ url_for('.customer_view_product', code=item[3] ) }} "  style="color: black;" >
+								<div class="product-title" > {{ item[1] }} </div> 
+							</a>
 							<div class="product-price">&#8377; {{ item[2] }} </div>
 							<div class="cart-action">
+								
+								<input type="hidden" id="code" name="code" value="{{ item[3] }}"/>
+								<!-- <input type="text" class="product-quantity" name="quantity" value="1" size="2" /> -->
+								<input type="hidden" id="imageName" name="imageName" value="{{ item[0] }}" />
+								<input type="hidden" id="productPrice" name="productPrice" value="{{ item[2] }}" />
 								<input type="submit" value="Add to Cart" class="btnAddAction" />
 							</div>
 						</div>
 					</form>
 				</div>
 			{% endfor %}
+			<div style="clear: both;"> </div>
 		{% endfor %}
 	</div>
 		

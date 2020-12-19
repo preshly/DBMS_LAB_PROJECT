@@ -1,0 +1,118 @@
+
+{% extends 'base.html' %}
+
+{% block body %}
+	<!-- Home page for the website -->
+	<header class="website-header">
+		<div class="div-logo">
+			<a href = " {{ url_for('.customer_loggedin_home_page') }} " class="logo-text"> Ecomm </a>
+		</div>
+		
+		<nav class="website-nav">
+            <a href = " {{ url_for('.my_orders') }} "> My Orders </a>
+            <a href = " {{ url_for('.my_cart') }} "> My Cart </a>
+			<a href = " {{ url_for('.my_account') }} "> My Account </a>
+			<a href = " {{ url_for('.customer_logout') }} "> Log out </a>
+		</nav>
+    </header>
+
+    {% with messages = get_flashed_messages() %}  
+		{% if messages %}  
+			{% for message in messages %}  				
+				{% if message == 'Item removed from cart' %}
+                    <script> alert('Item removed from cart') </script>
+                {% elif message == 'You\'re cart is empty' %}
+					<script> alert('You\'re cart is empty') </script>
+				{% endif %}
+			{% endfor %}  
+		{% endif %}  
+    {% endwith %}
+
+    <div id="product-grid">
+        <div class="txt-heading"> Products In My Cart</div>
+        <div> </div>
+        <br> <br> <br>
+        {% if messages %}
+            {% for message in messages %}  
+				{% if message == 'You\'re cart is empty' %}
+					<p style="text-align: center;"> You're cart is empty </p>
+				{% endif %}
+			{% endfor %}
+        {% endif %}
+        
+        {% for product in products %}
+            {% for item in products[product] %}
+                <div class="product-item">
+                    <form method="POST" action="/delete_product_from_cart">
+                        <div class="product-image"> <img src="static/products/{{ item[0] }} " ></div>
+                        <div class="product-tile-footer">
+                            <a href="{{ url_for('.customer_view_product', code=item[3] ) }} "  style="color: black;" >
+								<div class="product-title" > {{ item[1] }} </div> 
+							</a>
+                            <div class="product-price">&#8377; {{ item[2] }} </div>
+                            <div class="cart-action">
+                                
+                                <input type="hidden" id="code" name="code" value="{{ item[3] }}"/>
+                                <input type="text" class="product-quantity" name="quantity" value="1" size="2" readonly/>
+                                <input type="hidden" id="imageName" name="imageName" value="{{ item[0] }}" />
+                                <input type="hidden" id="productPrice" name="productPrice" value="{{ item[2] }}" />
+                                <!-- <span style="display: inline-block;" class="btnAddAction"> &#128465;</span> -->
+                                <a href="{{ url_for('.delete_product_from_cart', code=item[3] ) }}" >
+                                    <span style="display: inline-block;" class="btnAddAction"> &#128465;</span>
+                                </a>
+                                <!-- <input type="submit" value="" class="btnAddAction" /> -->
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            {% endfor %}
+        {% endfor %}
+            
+        
+        
+    </div>
+
+    <div style="clear: both;"> </div> <div> </div>
+    <br> <br>
+    
+
+    {% if subTotal %}
+        <hr>
+        <div class="order-total-txt-heading">  Cart Summary  </div>
+        <br>
+        <br>
+
+        <table class="tbl-cart table-css" cellpadding="10px" cellspacing="1" align="center">
+            <tbody>
+                <tr>
+                    <th>Name</th>
+                    <th >Price</th>
+                </tr>
+                {% for product in products %}
+                    {% for item in products[product] %} 
+                    <tr>         
+                            <td >  {{ item[1] }}  </td> 
+                            <td > &#8377;{{ item[2] }}  </td>
+                    </tr>
+                    {% endfor %}
+                {% endfor %}
+    
+                <tr>
+                    <td >Sub Total</td>
+                    <td > &#8377; {{ subTotal}} </td>                               
+                </tr>
+                
+            </tbody>
+        </table>
+        <br>
+        <form method="POST" action="/customer_order" style="align-items: center;" align="center">
+            <input type="hidden" id="subTotal" name="subTotal" value={{subTotal}} />
+            <input type="submit" value="Order" style="position: relative; left: 50%;"  align="center"  />
+        </form>
+
+        
+    {% endif %}
+
+    <br> <br>
+
+{% endblock %}
